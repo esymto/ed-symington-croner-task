@@ -11,10 +11,6 @@ export default function Absences() {
 		staleTime: 1000 * 60 * 10
 	});
 
-	if (isPending) {
-		return
-	}
-
 	return (
 		<>
 			<h1>Absences</h1>
