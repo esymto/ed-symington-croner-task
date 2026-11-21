@@ -1,7 +1,7 @@
 import logo from './assets/logo.svg';
 import './App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Absences from './components/Absenses';
+import Absences from './components/Absences';
 
 const queryClient = new QueryClient();
 

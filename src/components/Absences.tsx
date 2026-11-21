@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAbsences } from '../api/absenses';
+import { getAbsences } from '../api/absences';
 import Table from './Table';
 
 export default function Absences() {

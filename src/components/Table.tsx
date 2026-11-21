@@ -1,4 +1,4 @@
-import type { Absence } from '../api/absenses';
+import type { Absence } from '../schemas/absences';
 
 type Props = {
 	data: Absence[];
