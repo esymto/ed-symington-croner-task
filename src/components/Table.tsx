@@ -3,6 +3,7 @@ import type { Absence } from '../schemas/absences';
 import type { SearchParams } from '../schemas/search-params';
 import { absencesRoute } from '../routes/absences';
 import { useTable, tableFeatures, type ColumnDef, type SortingState, rowSortingFeature, createSortedRowModel, sortFn_alphanumeric, sortFn_basic } from '@tanstack/react-table';
+import ConflictCell from './ConflictCell';
 
 type Props = {
 	data: Absence[];
@@ -69,8 +70,8 @@ const columns: Array<ColumnDef<typeof features, Absence>> = [
 	{
 		id: 'clashes',
 		accessorFn: (row) => row.id,
-		header: 'Clashes',
-		cell: (info) => <span>{info.getValue() as string}</span>,
+		header: 'Has Conflicts',
+		cell: (info) => <ConflictCell absenceId={info.getValue() as number} />,
 		enableSorting: false,
 	},
 ];

@@ -15,6 +15,11 @@ export const AbsenceSchema = z.object({
 	approved: z.boolean()
 });
 
+export const ConflictSchema = z.object({
+	conflicts: z.boolean()
+});
+
 export const AbsencesSchema = z.array(AbsenceSchema);
 export type Absence = z.infer<typeof AbsenceSchema>;
 export type Employee = z.infer<typeof EmployeeSchema>;
+export type Conflict = z.infer<typeof ConflictSchema>;
