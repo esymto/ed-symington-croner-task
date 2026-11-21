@@ -1,26 +1,19 @@
-import logo from './assets/logo.svg';
-import './App.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Absences from './components/Absences';
+import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { rootRoute } from './routes/root';
+import { absencesRoute } from './routes/absences';
 
 const queryClient = new QueryClient();
+const routeTree = rootRoute.addChildren([absencesRoute]);
+const router = createRouter({ routeTree });
 
 function App() {
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<header>
-				<div className='container px-8 py-4'>
-					<img src={logo} width="145" height="38" alt="BrightHR" />
-				</div>
-			</header>
-			<main>
-				<div className='container px-8 mt-4'>
-					<Absences />
-				</div>
-			</main>
+			<RouterProvider router={router} />
 		</QueryClientProvider>
-	)
+	);
 }
 
 export default App;

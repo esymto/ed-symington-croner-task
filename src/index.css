@@ -6,3 +6,7 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+.container {
+  @apply max-w-[1500px] mx-auto;
+}
