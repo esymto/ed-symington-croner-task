@@ -5,7 +5,12 @@ import { absencesRoute } from './routes/absences';
 
 const queryClient = new QueryClient();
 const routeTree = rootRoute.addChildren([absencesRoute]);
-const router = createRouter({ routeTree });
+const router = createRouter({ 
+	routeTree,
+	context: {
+		queryClient,
+	}
+});
 
 function App() {
 

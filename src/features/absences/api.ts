@@ -1,4 +1,4 @@
-import { type Absence, type Conflict, ConflictSchema, AbsencesSchema } from "../schemas/absences";
+import { type Absence, type Conflict, ConflictSchema, AbsencesSchema } from "./schemas";
 
 export async function getAbsences(): Promise<Absence[]> {
 

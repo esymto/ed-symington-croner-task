@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import type { Absence } from '../schemas/absences';
-import type { SearchParams } from '../schemas/search-params';
-import { absencesRoute } from '../routes/absences';
+import type { Absence, SearchParams } from '../../schemas';
+import { absencesRoute } from '../../../../routes/absences';
 import { useTable, tableFeatures, type ColumnDef, type SortingState, rowSortingFeature, createSortedRowModel, sortFn_alphanumeric, sortFn_basic } from '@tanstack/react-table';
 import ConflictCell from './ConflictCell';
 
@@ -81,6 +80,11 @@ export default function Table({ data }: Props) {
 	const { sort, direction } = absencesRoute.useSearch();
 	const navigate = absencesRoute.useNavigate();
 	const sorting = useMemo<SortingState>(() => [{ id: sort, desc: direction === 'desc' }], [sort, direction]);
+	
+	if(!data.length) {
+		return <p>No absences found.</p>
+	}
+	
 	const table = useTable({
 		features,
 		columns,
@@ -105,42 +109,42 @@ export default function Table({ data }: Props) {
 		});
 	};
 
-	return <>
-		<table>
-			<thead>
-				{table.getHeaderGroups().map((headerGroup) => (
-					<tr key={headerGroup.id}>
-						{headerGroup.headers.map((header) => (
-							<th 
-								key={header.id}
-								onClick={header.column.getCanSort() ? () => sortHandler(header.column.id) : undefined}
-								style={{
-									cursor: header.column.getCanSort() ? 'pointer' : 'default',
-								}}
-							>
-								{header.isPlaceholder ? null : (
-									<>
-										<table.FlexRender header={header} />
-										{header.column.getIsSorted() === 'asc' && ' ▲'}
-										{header.column.getIsSorted() === 'desc' && ' ▼'}
-									</>
-								)}
-							</th>
-						))}
-					</tr>
-				))}
-			</thead>
-			<tbody>
-				{table.getRowModel().rows.map((row) => (
-					<tr key={row.id}>
-						{row.getAllCells().map((cell) => (
-							<td key={cell.id}>
-								<table.FlexRender cell={cell} />
-							</td>
-						))}
-					</tr>
-				))}
-			</tbody>
-		</table>
-	</>;
+	return (
+		<>
+			<table>
+				<thead>
+					{table.getHeaderGroups().map((headerGroup) => (
+						<tr key={headerGroup.id}>
+							{headerGroup.headers.map((header) => (
+								<th 
+									key={header.id}
+									onClick={header.column.getCanSort() ? () => sortHandler(header.column.id) : undefined}
+									className={header.column.getCanSort() ? 'cursor-pointer' : ''}
+								>
+									{header.isPlaceholder ? null : (
+										<>
+											<table.FlexRender header={header} />
+											{header.column.getIsSorted() === 'asc' && ' ▲'}
+											{header.column.getIsSorted() === 'desc' && ' ▼'}
+										</>
+									)}
+								</th>
+							))}
+						</tr>
+					))}
+				</thead>
+				<tbody>
+					{table.getRowModel().rows.map((row) => (
+						<tr key={row.id}>
+							{row.getAllCells().map((cell) => (
+								<td key={cell.id}>
+									<table.FlexRender cell={cell} />
+								</td>
+							))}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</>
+	);
 }

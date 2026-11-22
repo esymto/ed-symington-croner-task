@@ -1,7 +1,12 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import { QueryClient } from '@tanstack/react-query';
 import logo from '../assets/logo.svg';
 
-export const rootRoute = createRootRoute({
+export type RouterContext = {
+	queryClient: QueryClient;
+}
+
+export const rootRoute = createRootRouteWithContext<RouterContext>()({
 	component: () => (
 		<>
 			<header>
