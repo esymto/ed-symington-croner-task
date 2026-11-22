@@ -7,6 +7,7 @@ const queryClient = new QueryClient();
 const routeTree = rootRoute.addChildren([absencesRoute]);
 const router = createRouter({ 
 	routeTree,
+	basepath: import.meta.env.BASE_URL,
 	context: {
 		queryClient,
 	}
