@@ -1,16 +1,32 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { Absence, SearchParams } from '../../schemas';
 import { absencesRoute } from '../../../../routes/absences';
-import { useTable, tableFeatures, type ColumnDef, type SortingState, rowSortingFeature, createSortedRowModel, sortFn_alphanumeric, sortFn_basic } from '@tanstack/react-table';
+import { 
+	useTable, 
+	tableFeatures, 
+	type ColumnDef, 
+	type SortingState, 
+	type PaginationState, 
+	rowSortingFeature, 
+	createSortedRowModel, 
+	rowPaginationFeature, 
+	createPaginatedRowModel, 
+	sortFn_alphanumeric, 
+	sortFn_basic 
+} from '@tanstack/react-table';
 import ConflictCell from './ConflictCell';
 
 type Props = {
 	data: Absence[];
 };
 
+const ROWS_PER_PAGE = 10;
+
 const features = tableFeatures({
 	rowSortingFeature,
 	sortedRowModel: createSortedRowModel(),
+	rowPaginationFeature,
+	paginatedRowModel: createPaginatedRowModel(),
 });
 
 const columns: Array<ColumnDef<typeof features, Absence>> = [
@@ -77,9 +93,44 @@ const columns: Array<ColumnDef<typeof features, Absence>> = [
 
 export default function Table({ data }: Props) {
 
-	const { sort, direction } = absencesRoute.useSearch();
+	const { sort, direction, page } = absencesRoute.useSearch();
 	const navigate = absencesRoute.useNavigate();
 	const sorting = useMemo<SortingState>(() => [{ id: sort, desc: direction === 'desc' }], [sort, direction]);
+	const numPages = Math.max(1, Math.ceil(data.length / ROWS_PER_PAGE));
+	
+	const pagination = useMemo<PaginationState>(() => {
+
+		let currentPage = page < 1 ? 1 : page;
+
+		if(currentPage > numPages) {
+			
+			currentPage = numPages;
+		}
+
+		return {
+			pageIndex: currentPage - 1,
+			pageSize: ROWS_PER_PAGE
+		};
+
+	}, [page]);
+
+	useEffect(() => {
+
+		// Redirect if URL param is outside pagination bounds (Zod already fixes < 0)
+		if (page > numPages) {
+
+			navigate({
+				replace: true,
+				search: (prev: SearchParams) => ({
+					...prev,
+					page: numPages,
+				}),
+			});
+		}
+
+	}, [page, numPages, navigate]);
+
+	const currentPage = pagination.pageIndex + 1;
 	
 	if(!data.length) {
 		return <p>No absences found.</p>
@@ -90,7 +141,8 @@ export default function Table({ data }: Props) {
 		columns,
 		data,
 		state: {
-			sorting
+			sorting,
+			pagination
 		}
 	});
 	
@@ -105,6 +157,27 @@ export default function Table({ data }: Props) {
 				sort: columnId as typeof prev.sort,
 				direction: nextDirection,
 				page: 1,
+			}),
+		});
+	};
+
+	const paginationClickHandler = (nextPage: number) => {
+		
+		let clampedNextPage = nextPage;
+
+		if(nextPage > numPages) {
+
+			clampedNextPage = numPages;
+
+		} else if(nextPage < 1) {
+
+			clampedNextPage = 1;
+		}
+
+		navigate({
+			search: (prev: SearchParams) => ({
+				...prev,
+				page: clampedNextPage,
 			}),
 		});
 	};
@@ -145,6 +218,29 @@ export default function Table({ data }: Props) {
 					))}
 				</tbody>
 			</table>
+			<div className='flex justify-between'>
+				<span>
+					Page {currentPage} of {numPages}
+				</span>
+				<div className='flex gap-x-2'>
+					<button
+						type="button"
+						onClick={() => paginationClickHandler(currentPage - 1)}
+						disabled={!table.getCanPreviousPage()}
+						className='cursor-pointer'
+					>
+						Previous Page
+					</button>
+					<button
+						type="button"
+						onClick={() => paginationClickHandler(currentPage + 1)}
+						disabled={!table.getCanNextPage()}
+						className='cursor-pointer'
+					>
+						Next Page
+					</button>
+				</div>
+			</div>
 		</>
 	);
 }
