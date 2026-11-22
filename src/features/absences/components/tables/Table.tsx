@@ -1,6 +1,7 @@
 import './Table.css';
 import { useEffect, useMemo } from 'react';
 import type { Absence, SearchParams } from '../../schemas';
+import { getEndDateExcludingWeekends } from '../../utils';
 import { absencesRoute } from '../../../../routes/absences';
 import { 
 	useTable, 
@@ -57,12 +58,7 @@ const columns: Array<ColumnDef<typeof features, Absence>> = [
 	},
 	{
 		id: 'endDate',
-		accessorFn: (row) => {
-
-			const endDate = new Date(row.startDate);
-			endDate.setDate(endDate.getDate() + (row.days - 1));
-			return endDate.getTime();
-		},
+		accessorFn: (row) => getEndDateExcludingWeekends(row.startDate, row.days).getTime(),
 		header: 'End Date',
 		cell: (info) => {
 
