@@ -4,6 +4,6 @@ type Props = {
 
 export function Title({ text }: Props) {
     return (
-        <h1>{text}</h1>
+        <h1 className="text-4xl font-semibold mb-8">{text}</h1>
     );
 }

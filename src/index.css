@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+	--color-table-header: #EBF6FE;
+	--color-table-row-border: #CFDCE7;
+	--color-table-body: #6F7F8B;
+	--color-status-approved-light: #CFE7DA;
+	--color-status-approved-dark: #2C6540;
+	--color-status-neutral-light: #EBF6FE;
+	--color-status-neutral-dark: #2E67AE;
+}
+
 body {
 	font-family: "Albert Sans", sans-serif;
 	font-optical-sizing: auto;

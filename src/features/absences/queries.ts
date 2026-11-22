@@ -8,7 +8,7 @@ export const absencesQueryOptions = () => queryOptions({
 });
 
 export const conflictQueryOptions = (absenceId: Number) => queryOptions({
-    queryKey: ['clashes', absenceId],
+    queryKey: ['conflict', absenceId],
     queryFn: () => getConflict(absenceId),
     staleTime: 1000 * 60 * 10
 });

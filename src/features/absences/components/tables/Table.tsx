@@ -1,3 +1,4 @@
+import './Table.css';
 import { useEffect, useMemo } from 'react';
 import type { Absence, SearchParams } from '../../schemas';
 import { absencesRoute } from '../../../../routes/absences';
@@ -15,12 +16,18 @@ import {
 	sortFn_basic 
 } from '@tanstack/react-table';
 import ConflictCell from './ConflictCell';
+import StatusLabel from './StatusLabel';
+import TypeLabel from './TypeLabel';
+import iconSortable from '../../../../assets/images/icons/sortable.svg';
+import iconSortedAsc from '../../../../assets/images/icons/sorted-asc.svg';
+import iconSortedDesc from '../../../../assets/images/icons/sorted-desc.svg';
 
 type Props = {
 	data: Absence[];
 };
 
 const ROWS_PER_PAGE = 10;
+const SORT_ICON_SIZE = 10;
 
 const features = tableFeatures({
 	rowSortingFeature,
@@ -71,21 +78,21 @@ const columns: Array<ColumnDef<typeof features, Absence>> = [
 		cell: (info) => {
 
 			const approved = info.getValue() as boolean;
-			return approved ? 'Approved' : 'Pending approval';
+			return <StatusLabel approved={approved} />;
 		},
 		enableSorting: false,
 	},
 	{
 		id: 'type',
-		accessorKey: 'absenceType',
+		accessorFn: (row) => row.absenceType.replaceAll('_', ' '),
 		header: 'Type',
-		cell: (info) => info.getValue(),
+		cell: (info) => <TypeLabel text={info.getValue() as string} />,
 		sortFn: sortFn_alphanumeric,
 	},
 	{
-		id: 'clashes',
+		id: 'conflicts',
 		accessorFn: (row) => row.id,
-		header: 'Has Conflicts',
+		header: 'Conflicts',
 		cell: (info) => <ConflictCell absenceId={info.getValue() as number} />,
 		enableSorting: false,
 	},
@@ -184,58 +191,93 @@ export default function Table({ data }: Props) {
 
 	return (
 		<>
-			<table>
-				<thead>
-					{table.getHeaderGroups().map((headerGroup) => (
-						<tr key={headerGroup.id}>
-							{headerGroup.headers.map((header) => (
-								<th 
-									key={header.id}
-									onClick={header.column.getCanSort() ? () => sortHandler(header.column.id) : undefined}
-									className={header.column.getCanSort() ? 'cursor-pointer' : ''}
-								>
-									{header.isPlaceholder ? null : (
-										<>
-											<table.FlexRender header={header} />
-											{header.column.getIsSorted() === 'asc' && ' ▲'}
-											{header.column.getIsSorted() === 'desc' && ' ▼'}
-										</>
-									)}
-								</th>
-							))}
-						</tr>
-					))}
-				</thead>
-				<tbody>
-					{table.getRowModel().rows.map((row) => (
-						<tr key={row.id}>
-							{row.getAllCells().map((cell) => (
-								<td key={cell.id}>
-									<table.FlexRender cell={cell} />
-								</td>
-							))}
-						</tr>
-					))}
-				</tbody>
-			</table>
-			<div className='flex justify-between'>
+			<div className="overflow-x-auto mb-3">
+				<table className='w-full text-left text-base font-medium'>
+					<thead className='bg-table-header font-semibold border-b-[2px] border-table-row-border tracking-wider'>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<tr key={headerGroup.id}>
+								{headerGroup.headers.map((header) => { 
+									
+									let headerTitle = '';
+
+									if((header.column.getCanSort() && !header.column.getIsSorted())
+										|| (header.column.getCanSort() && header.column.getIsSorted() === 'desc')) {
+									
+										headerTitle = `Sort by ${header.column.columnDef.header} ascending`;
+									
+									} else if(header.column.getCanSort() && header.column.getIsSorted() === 'asc') {
+
+										headerTitle = `Sort by ${header.column.columnDef.header} descending`;
+									}
+
+									return (
+										<th 
+											key={header.id}
+											onClick={header.column.getCanSort() ? () => sortHandler(header.column.id) : undefined}
+											className={`${header.column.getCanSort() ? 'cursor-pointer ' : ''}p-3`}
+											title={headerTitle}
+										>
+											{header.isPlaceholder ? null : (
+												<div className='whitespace-nowrap flex gap-x-2'>
+													<table.FlexRender header={header} />
+													{header.column.getCanSort() && !header.column.getIsSorted() &&
+														<>
+															<img src={iconSortable} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
+														</>
+													}
+													{header.column.getIsSorted() === 'asc' &&
+														<>
+															<img src={iconSortedAsc} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
+														</>
+													}
+													{header.column.getIsSorted() === 'desc' &&
+														<>
+															<img src={iconSortedDesc} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
+														</>
+													}
+												</div>
+											)}
+										</th>
+									);
+								})}
+							</tr>
+						))}
+					</thead>
+					<tbody className='divide-y divide-table-row-border'>
+						{table.getRowModel().rows.map((row) => (
+							<tr key={row.id}>
+								{row.getAllCells().map((cell) => (
+									<td 
+										key={cell.id}
+										className='p-3 text-table-body'
+									>
+										<table.FlexRender cell={cell} />
+									</td>
+								))}
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+			<div className='flex justify-between text-sm mb-5 p-3 text-table-body'>
 				<span>
-					Page {currentPage} of {numPages}
+					Page <strong>{currentPage}</strong> of <strong>{numPages}</strong>
 				</span>
 				<div className='flex gap-x-2'>
 					<button
 						type="button"
 						onClick={() => paginationClickHandler(currentPage - 1)}
 						disabled={!table.getCanPreviousPage()}
-						className='cursor-pointer'
+						className='paginate'
 					>
 						Previous Page
 					</button>
+					|
 					<button
 						type="button"
 						onClick={() => paginationClickHandler(currentPage + 1)}
 						disabled={!table.getCanNextPage()}
-						className='cursor-pointer'
+						className='paginate'
 					>
 						Next Page
 					</button>
