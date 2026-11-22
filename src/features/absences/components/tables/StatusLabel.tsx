@@ -1,18 +1,16 @@
-import './StatusLabel.css';
-
 type Props = {
-    approved: Boolean;
+    approved: boolean;
 };
 
-export default function Table({ approved }: Props) {
+export default function StatusLabel({ approved }: Props) {
 
     return (
         <>
             {approved &&
-                <span className='label approved'>Approved</span>
+                <span className='value-label approved'>Approved</span>
             }
             {!approved &&
-                <span className='label'>Pending</span>
+                <span className='value-label'>Pending</span>
             }
         </>
     );

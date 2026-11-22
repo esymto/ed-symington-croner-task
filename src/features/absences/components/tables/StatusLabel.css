@@ -1,5 +1,0 @@
-@reference "../../../../index.css";
-
-.label.approved {
-    @apply bg-status-approved-light text-status-approved-dark;
-}

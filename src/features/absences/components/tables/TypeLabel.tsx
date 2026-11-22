@@ -1,10 +1,8 @@
-import './TypeLabel.css';
-
 type Props = {
-    text: String;
+    text: string;
 };
 
-export default function Table({ text }: Props) {
+export default function TypeLabel({ text }: Props) {
 
-    return <span className='label neutral'>{text}</span>;
+    return <span className='value-label neutral'>{text}</span>;
 }

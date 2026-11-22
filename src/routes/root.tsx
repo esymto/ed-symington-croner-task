@@ -4,7 +4,7 @@ import logo from '../assets/images/logo.svg';
 
 export type RouterContext = {
 	queryClient: QueryClient;
-}
+};
 
 export const rootRoute = createRootRouteWithContext<RouterContext>()({
 	component: () => (

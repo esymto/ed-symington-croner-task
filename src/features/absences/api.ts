@@ -13,7 +13,7 @@ export async function getAbsences(): Promise<Absence[]> {
 	return AbsencesSchema.parse(data);
 }
 
-export async function getConflict(absenceId: Number): Promise<Conflict> {
+export async function getConflict(absenceId: number): Promise<Conflict> {
 
 	const response = await fetch(`https://front-end-kata.brighthr.workers.dev/api/conflict/${absenceId}`);
 

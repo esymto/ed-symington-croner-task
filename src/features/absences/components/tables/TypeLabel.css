@@ -1,5 +1,0 @@
-@reference "../../../../index.css";
-
-.label.neutral {
-    @apply bg-status-neutral-light text-status-neutral-dark;
-}

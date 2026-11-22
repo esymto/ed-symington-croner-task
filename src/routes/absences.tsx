@@ -30,7 +30,7 @@ function AbsencesPage() {
 			<Title text="Absences" />
 			<Table data={data} />
 		</>
-	)
+	);
 }
 
 function AbsencesPageSkeleton() {
@@ -39,7 +39,7 @@ function AbsencesPageSkeleton() {
 			<Title text="Absences" />
 			Loading...
 		</>
-	)
+	);
 }
 
 function AbsencesPageError({ error }: ErrorComponentProps) {
@@ -54,7 +54,7 @@ function AbsencesPageError({ error }: ErrorComponentProps) {
 				issue.path.length > 0
 					? `\n${issue.path.join(' - ')}: ${issue.message}`
 					: `\n${issue.message}`,
-			).join();
+			).join('');
 
 	} else if (error instanceof Error) {
 
@@ -66,5 +66,5 @@ function AbsencesPageError({ error }: ErrorComponentProps) {
 			<Title text="Absences" />
 			<p className='whitespace-pre-line'>{errorMessage}</p>
 		</>
-	)
+	);
 }

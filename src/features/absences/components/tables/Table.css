@@ -7,18 +7,32 @@ table {
 	}
 }
 
-.label {
+.value-label {
     @apply px-3 py-1 border border-table-row-border rounded-full bg-white text-xs font-bold uppercase whitespace-nowrap;
+
+    &.approved {
+        @apply bg-status-approved-light text-status-approved-dark;
+    }
+
+    &.neutral {
+        @apply bg-status-neutral-light text-status-neutral-dark;
+    }
 }
 
 button.paginate {
-    @apply cursor-pointer font-bold;
+    
+    @apply font-bold opacity-50;
 
-    @media (hover: hover) {
+    &:not(:disabled) {
 
-        &:hover {
-           @apply underline; 
+        @apply cursor-pointer opacity-100;
+
+        @media (hover: hover) {
+
+            &:hover {
+                @apply underline; 
+            }
+            
         }
-        
     }
 }

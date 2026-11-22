@@ -1,6 +1,6 @@
 type Props = {
-    text: String
-}
+    text: string;
+};
 
 export function Title({ text }: Props) {
     return (

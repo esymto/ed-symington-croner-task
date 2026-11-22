@@ -7,7 +7,7 @@ export const absencesQueryOptions = () => queryOptions({
     staleTime: 1000 * 60 * 10
 });
 
-export const conflictQueryOptions = (absenceId: Number) => queryOptions({
+export const conflictQueryOptions = (absenceId: number) => queryOptions({
     queryKey: ['conflict', absenceId],
     queryFn: () => getConflict(absenceId),
     staleTime: 1000 * 60 * 10

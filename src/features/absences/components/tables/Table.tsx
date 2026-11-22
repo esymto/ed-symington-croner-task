@@ -119,7 +119,7 @@ export default function Table({ data }: Props) {
 			pageSize: ROWS_PER_PAGE
 		};
 
-	}, [page]);
+	}, [page, numPages]);
 
 	useEffect(() => {
 
@@ -139,10 +139,6 @@ export default function Table({ data }: Props) {
 
 	const currentPage = pagination.pageIndex + 1;
 	
-	if(!data.length) {
-		return <p>No absences found.</p>
-	}
-	
 	const table = useTable({
 		features,
 		columns,
@@ -152,6 +148,10 @@ export default function Table({ data }: Props) {
 			pagination
 		}
 	});
+
+	if(!data.length) {
+		return <p>No absences found.</p>;
+	}
 	
 	const sortHandler = (columnId: string) => {
 		
@@ -199,44 +199,55 @@ export default function Table({ data }: Props) {
 								{headerGroup.headers.map((header) => { 
 									
 									let headerTitle = '';
+									let sortStatus: 'none' | 'ascending' | 'descending' | undefined = undefined;
 
-									if((header.column.getCanSort() && !header.column.getIsSorted())
-										|| (header.column.getCanSort() && header.column.getIsSorted() === 'desc')) {
-									
-										headerTitle = `Sort by ${header.column.columnDef.header} ascending`;
-									
-									} else if(header.column.getCanSort() && header.column.getIsSorted() === 'asc') {
+									if(header.column.getCanSort()) {
 
-										headerTitle = `Sort by ${header.column.columnDef.header} descending`;
+										if(!header.column.getIsSorted()) {
+
+											headerTitle = `Sort by ${header.column.columnDef.header} ascending`;
+											sortStatus = 'none';
+
+										} else if(header.column.getIsSorted() === 'desc') {
+										
+											headerTitle = `Sort by ${header.column.columnDef.header} ascending`;
+											sortStatus = 'descending';
+										
+										} else if(header.column.getIsSorted() === 'asc') {
+
+											headerTitle = `Sort by ${header.column.columnDef.header} descending`;
+											sortStatus = 'ascending';
+										}
 									}
 
 									return (
 										<th 
 											key={header.id}
-											onClick={header.column.getCanSort() ? () => sortHandler(header.column.id) : undefined}
-											className={`${header.column.getCanSort() ? 'cursor-pointer ' : ''}p-3`}
-											title={headerTitle}
+											className='p-3'
+											aria-sort={sortStatus}
 										>
-											{header.isPlaceholder ? null : (
-												<div className='whitespace-nowrap flex gap-x-2'>
+											{header.column.getCanSort() &&
+												<button 
+													className='whitespace-nowrap flex gap-x-2 cursor-pointer'
+													type="button"
+													title={headerTitle}
+													onClick={() => sortHandler(header.column.id)}
+												>
 													<table.FlexRender header={header} />
-													{header.column.getCanSort() && !header.column.getIsSorted() &&
-														<>
-															<img src={iconSortable} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
-														</>
+													{!header.column.getIsSorted() &&
+														<img src={iconSortable} width={SORT_ICON_SIZE} aria-hidden="true" alt="" className='h-auto' />
 													}
 													{header.column.getIsSorted() === 'asc' &&
-														<>
-															<img src={iconSortedAsc} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
-														</>
+														<img src={iconSortedAsc} width={SORT_ICON_SIZE} aria-hidden="true" alt="" className='h-auto' />
 													}
 													{header.column.getIsSorted() === 'desc' &&
-														<>
-															<img src={iconSortedDesc} width={SORT_ICON_SIZE} aria-hidden="true" alt={headerTitle} className='h-auto' />
-														</>
+														<img src={iconSortedDesc} width={SORT_ICON_SIZE} aria-hidden="true" alt="" className='h-auto' />
 													}
-												</div>
-											)}
+												</button>
+											}
+											{!header.column.getCanSort() &&
+												<table.FlexRender header={header} />
+											}
 										</th>
 									);
 								})}
@@ -272,7 +283,7 @@ export default function Table({ data }: Props) {
 					>
 						Previous Page
 					</button>
-					|
+					<span aria-hidden="true">|</span>
 					<button
 						type="button"
 						onClick={() => paginationClickHandler(currentPage + 1)}
