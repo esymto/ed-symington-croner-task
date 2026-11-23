@@ -11,7 +11,7 @@
 - End date calculation excludes weekends (start date + days absent skipping weekend days)
 - Uses Zod to validate API data and URL parameters
 - Styled to reflect actual BrightHR branding
-- Responsive accross screen sizes
+- Responsive across screen sizes
 - Shows an animated loading skeleton while fetching data
 - Tests table sorting and pagination using Vitest with React Testing Library running in jsdom. Each test renders the page through the actual router with mocked API data, then checks the row order, the pagination label, aria-sort values and URL search parameters.
 
