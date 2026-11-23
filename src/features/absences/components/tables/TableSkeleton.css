@@ -1,0 +1,36 @@
+@keyframes skeleton-loading {
+	0% {
+		transform: translateX(-100%);
+	}
+
+	60% {
+		transform: translateX(100%);
+	}
+
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+.skeleton-bar {
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, var(--color-skeleton), var(--color-skeleton-shimmer), var(--color-skeleton));
+		transform: translateX(-100%);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		&::after {
+			animation: skeleton-loading 1s linear .1s infinite;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&::after {
+			animation: skeleton-loading 5s linear 1s infinite;
+		}
+	}
+}

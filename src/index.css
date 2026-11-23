@@ -8,6 +8,8 @@
 	--color-status-approved-dark: #2C6540;
 	--color-status-neutral-light: #EBF6FE;
 	--color-status-neutral-dark: #2E67AE;
+	--color-skeleton: #F2F2F2;
+	--color-skeleton-shimmer: #E0E0E0;
 }
 
 body {

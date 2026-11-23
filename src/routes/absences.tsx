@@ -6,6 +6,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import Table from '../features/absences/components/tables/Table';
 import { Title } from '../features/absences/components/page-elements/Title';
 import { ZodError } from 'zod';
+import TableSkeleton from '../features/absences/components/tables/TableSkeleton';
 
 export const absencesRoute = createRoute({
 	getParentRoute: () => rootRoute,
@@ -37,7 +38,7 @@ function AbsencesPageSkeleton() {
 	return (
 		<>
 			<Title text="Absences" />
-			Loading...
+			<TableSkeleton />
 		</>
 	);
 }
