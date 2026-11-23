@@ -15,12 +15,13 @@
 - Shows an animated loading skeleton while fetching data
 - Tests table sorting and pagination using Vitest with React Testing Library running in jsdom. Each test renders the page through the actual router with mocked API data, then checks the row order, the pagination label, aria-sort values and URL search parameters.
 
-## What I'd Do With More Time
+## What I'd Do Given More Time
 
 - Add an option to sort employee names by last name
 - Add options to include weekend days or different shift patterns to more accurately calculate absence end dates
 - Improve colour contrast to optimize accessibility
 - Improve error styling
+- Share common table styles between absences page and skeleton tables to avoid duplication
 - Server-side render components to improve performance and SEO
 - Add animated loading skeletons to the conflicts column
 - Add unit tests for the Zod schemas
