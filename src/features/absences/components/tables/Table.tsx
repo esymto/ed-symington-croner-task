@@ -155,6 +155,7 @@ export default function Table({ data }: Props) {
 		const nextDirection: 'asc' | 'desc' = isSameColumn && direction === 'asc' ? 'desc' : 'asc';
 
 		navigate({
+			resetScroll: false,
 			search: (prev: SearchParams) => ({
 				...prev,
 				sort: columnId as typeof prev.sort,
@@ -178,6 +179,7 @@ export default function Table({ data }: Props) {
 		}
 
 		navigate({
+			resetScroll: false,
 			search: (prev: SearchParams) => ({
 				...prev,
 				page: clampedNextPage,
