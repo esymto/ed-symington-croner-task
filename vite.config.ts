@@ -4,8 +4,9 @@ import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
-export default defineConfig(({ command }) => ({
-	base: command === 'build' ? '/ed-symington-croner-task/' : '/',
+export default defineConfig(({ command, isPreview }) => ({
+	// Sub-path for GitHub Pages; the dev server stays at the root
+	base: command === 'build' || isPreview ? '/ed-symington-croner-task/' : '/',
 	plugins: [react(), tailwindcss()],
 	test: {
 		environment: 'jsdom',
