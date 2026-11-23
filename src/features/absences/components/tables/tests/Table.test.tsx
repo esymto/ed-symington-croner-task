@@ -3,9 +3,9 @@ import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router';
-import { rootRoute } from '../../../../routes/root';
-import { absencesRoute } from '../../../../routes/absences';
-import type { Absence } from '../../schemas';
+import { rootRoute } from '../../../../../routes/root';
+import { absencesRoute } from '../../../../../routes/absences';
+import type { Absence } from '../../../schemas';
 
 // 12 absences, so there are 2 pages of 10.
 // Names are alphabetical, start dates run in reverse (Alice latest, Liam earliest),
